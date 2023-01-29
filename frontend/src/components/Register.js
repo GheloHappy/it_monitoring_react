@@ -1,12 +1,27 @@
-import { useState } from "react";
+import { useState} from "react";
+import {  useNavigate } from "react-router-dom";
 const Register = () => {
 
     const [name,setName] = useState("");
     const [username,setUsername] = useState("");
     const [password,setPassword] = useState("");
-    const regData=()=>{
-        console.warn(name,username,password);
+    const navigate = useNavigate();
+    const regData=(e)=>{
+        e.preventDefault();
+        const userData = {username,password,name};     
+
+        fetch("http://192.168.1.64:4999/user",{
+            method:"POST",
+            headers:{"content-type":"application/json"},
+            body: JSON.stringify(userData),
+        }).then((res)=> {
+            alert('Registered Successfully');   
+            navigate("/");
+        }).catch((err)=>{
+            console.log(err.message);
+        })
     }
+    
 
     return(
         <div className="container mt-5">
