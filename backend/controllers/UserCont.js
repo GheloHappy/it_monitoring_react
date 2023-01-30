@@ -30,29 +30,42 @@ export const showUsersById = async (req, res) => {
 }
 
 export const createUser = async (req, res) => {
-    const password = req.body.password;
-    const saltRounds = 10;
-    
-    bcrypt.hash(password, saltRounds, function(err, hash) {
+    const { username, password } = req.body;
+    getUsers((err, results) => {
         if(err) {
-            console.log(err);
+            res.send(err);
         } else {
-            const data = {
-                "username": req.body.username,
-                "password": hash,
-                "name": req.body.name,
-            }
-        
-            //const data = req.body;
-            insertUser(data,
-                (err, results) => {
+            const user = results.find(function(u) {
+                return u.username === username;
+            })
+            if (user) {
+                return res.status(401).send({"message":"User already exists."});
+            } else {
+                const saltRounds = 10;
+                
+                bcrypt.hash(password, saltRounds, function(err, hash) {
                     if(err) {
-                        res.send(err);
+                        console.log(err);
                     } else {
-                        res.json(results);
+                        const data = {
+                            "username": req.body.username,
+                            "password": hash,
+                            "name": req.body.name,
+                        }
+                    
+                        //const data = req.body;
+                        insertUser(data,
+                            (err, results) => {
+                                if(err) {
+                                    res.send(err);
+                                } else {
+                                    res.json(results);
+                                }
+                            }
+                        );
                     }
-                }
-            );
+                });
+            }
         }
     });
 }

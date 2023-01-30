@@ -1,3 +1,4 @@
+import e from "express";
 import db from "../config/database.js";
 
 export const getUsers = (result) => {
@@ -27,7 +28,7 @@ export const getUserById = (id, result) => {
 export const insertUser = (data, result) => {
     db.query("INSERT INTO users SET ?", 
     [data],
-    (err, results) => {
+    (err, results) => { 
         if(err) {
             console.log(err);
             result(err, null);
