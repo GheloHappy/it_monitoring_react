@@ -12,15 +12,19 @@ const Nav = () => {
         <div>
             <ul className="nav-ul">
                 <li className='ml-5'><Link to="/">Home</Link></li>
-                <li><Link to="/tablets">Tablets</Link></li>
-                <li><Link to="/laptops">Laptops</Link></li>
-                <li><Link to="/damages">Damages</Link></li>
                 {
-                    auth ? <li className='is-pulled-right mr-5'> <Link onClick={logout} to="/login">Logout</Link> </li>
-                    : <>
-                        <li className='is-pulled-right mr-5'><Link to="/register">SignUp</Link></li>
-                        <li className='is-pulled-right'><Link to="/login">Login</Link></li>
-                    </>
+                    auth ?
+                        <>
+                            <li><Link to="/tablets">Tablets</Link></li>
+                            <li><Link to="/laptops">Laptops</Link></li>
+                            <li><Link to="/damages">Damages</Link></li>
+                            <li className='is-pulled-right mr-5'> <Link onClick={logout} to="/login">Logout</Link> </li>
+                        </>
+                        : 
+                        <>
+                            <li className='is-pulled-right mr-5'><Link to="/register">SignUp</Link></li>
+                            <li className='is-pulled-right'><Link to="/login">Login</Link></li>
+                        </>
                 }
             </ul>
         </div>

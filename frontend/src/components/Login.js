@@ -4,13 +4,17 @@ import { useNavigate } from "react-router";
 const Login = () => {
     const [username,setUsername] = useState("");
     const [password,setPassword] = useState("");
+
     const navigate = useNavigate();
     useEffect(() => {
-        const auth = localStorage.getItem('user');
-        if(auth) {
-            navigate('/');
+        function fetchAuth(){
+            const auth = localStorage.getItem('user');
+            if(auth) {
+                navigate('/');
+            }
         }
-    }, []);
+        fetchAuth();
+    }, [navigate]);
 
     const handleLogin = async () => {
         let result = await fetch("http://192.168.1.75:4999/login", {
@@ -22,6 +26,7 @@ const Login = () => {
         //console.warn(result);
         if(result.name) {
             localStorage.setItem('user',JSON.stringify(result));
+            localStorage.setItem('token',result.token);
             navigate("/");
         } else {
             alert("Username or password is incorrect.");

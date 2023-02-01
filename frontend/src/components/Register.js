@@ -1,4 +1,4 @@
-import { useState} from "react";
+import { useState, useEffect} from "react";
 import {  useNavigate } from "react-router-dom";
 const Register = () => {
 
@@ -6,21 +6,16 @@ const Register = () => {
     const [username,setUsername] = useState("");
     const [password,setPassword] = useState("");
     const navigate = useNavigate();
-    // const regData=(e)=>{
-    //     e.preventDefault();
-    //     const userData = {username,password,name};     
 
-    //     fetch("http://192.168.1.75:4999/user",{
-    //         method:"POST",
-    //         headers:{"content-type":"application/json"},
-    //         body: JSON.stringify(userData),
-    //     }).then((res)=> {
-    //         alert('Registered Successfully');   
-    //         navigate("/login");
-    //     }).catch((err)=>{
-    //         console.log(err.message);
-    //     })
-    // }
+    useEffect(() => {
+        function fetchAuth(){
+            const auth = localStorage.getItem('user');
+            if(auth) {
+                navigate('/');
+            }
+        }
+        fetchAuth();
+    }, [navigate]);
 
     const handleRegister = async () => {
         const userData = {username,password,name};  
@@ -31,14 +26,13 @@ const Register = () => {
         });
         result = await result.json();
         //console.warn(result);
-        if(result.message) {
+        if(result.insertId) {
             alert('Registered Successfully');
             navigate("/login");
         } else {
             alert("User already exists.");
         }
     }
-    
 
     return(
         <div className="container mt-5">

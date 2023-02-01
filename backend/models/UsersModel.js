@@ -1,4 +1,3 @@
-import e from "express";
 import db from "../config/database.js";
 
 export const getUsers = (result) => {
