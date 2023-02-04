@@ -1,12 +1,12 @@
 import jwt from "jsonwebtoken";
-import { getUsers } from "../models/UsersModel.js";
+import { getValidUsers } from "../models/UsersModel.js";
 import bcrypt from "bcrypt";
 
 const secret = process.env.JWT_SECRET || 'secret';
 
 export const loginUser = async (req, res) => {
     const { username, password } = req.body;
-    getUsers((err, results) => {
+    getValidUsers((err, results) => {
         if (err) {
             res.send(err);
         } else {
@@ -23,11 +23,13 @@ export const loginUser = async (req, res) => {
                     throw err;
                 }
                 if (hash) {
-                    const token = jwt.sign({ id: user.id }, secret, { algorithm: 'HS256' });
+                    const expiresIn = '1d';
+                    const token = jwt.sign({ id: user.id }, secret, { algorithm: 'HS256',expiresIn});
                     res.send({
                         "id": user.id,
                         "name": user.name,
-                        token
+                        token,
+                        "tokenExpiration": expiresIn,
                     });
                 } else {
                     return res.status(401).send({ "result": "Username or password is incorrect" });
@@ -45,7 +47,7 @@ export const validateToken = async (req, res) => {
     try {
         const decoded = jwt.verify(token, secret);
         //console.log('Token is valid:', decoded);
-        return res.status(200).send({'decoded':'Token is valid:'});
+        return res.status(200).send({'Token is valid': decoded});
     } catch (error) {
         return res.status(400).send({ error: 'Invalid token' });
     }
