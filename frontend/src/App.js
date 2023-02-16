@@ -5,7 +5,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Nav from './components/Nav.js';
 import Register from './components/Register';
 import Login from './components/Login';
-import Tablets from './components/Tablets';
+import Tablets from './components/tablet/Tablets';
 import Auth from './middleware/Auth';
 
 function App() {

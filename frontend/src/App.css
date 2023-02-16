@@ -1,28 +1,17 @@
-.nav-ul {
-  padding: 5px;
-  margin: 0px;
-  background-color: rgb(63, 51, 90);
+#nav-item:hover {
+  background-color: #4d2424;
 }
 
-.nav-ul li{
-  display: inline-block;
-  padding: 10px;
-  font-size: 20px;
+#nav-item {
+  font-size: 1.3em;
 }
 
-.nav-ul li a {
-    color: #fff;
-    text-decoration: none;
-    padding: 5px;
+#nav-item.is-active {
+  background-color: #c42929;
 }
 
-.footer {
-  position:absolute;
-  bottom: 0;
-  background-color: rgb(63, 51, 90);
-  width: 100%;
-  text-align: center;
-  color: #fff;
+#nav {
+  background-color: #3f335a;
 }
 
 .App-logo {

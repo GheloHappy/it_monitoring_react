@@ -35,7 +35,7 @@ const Register = () => {
     }
 
     return(
-        <div className="container mt-5">
+        <div className="container mt-6">
             <div className="columns is-mobile is-centered ">
                 <div className="column is-one-third mt-6 box has-text-centered" id="form">
                     <h1 className="title is-1 has-text-white ">SignUp</h1>

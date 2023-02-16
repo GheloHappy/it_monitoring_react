@@ -1,33 +1,55 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 const Nav = () => {
     const auth = localStorage.getItem('user');
     const navigate = useNavigate();
+    const location = useLocation    ();
+    
     const logout = () => {
         localStorage.clear();
         navigate('/login');
     }
     return (
-        <div>
-            <ul className="nav-ul">
-                <li className='ml-5'><Link to="/">Home</Link></li>
-                {
-                    auth ?
+        <nav id="nav" className='navbar is-fixed-top' role="navigation" aria-label="main navigation">
+            <div className="navbar-menu">
+                <div className="navbar-start">
+                    {
+                        auth ?
                         <>
-                            <li><Link to="/tablets">Tablets</Link></li>
-                            <li><Link to="/laptops">Laptops</Link></li>
-                            <li><Link to="/damages">Damages</Link></li>
-                            <li className='is-pulled-right mr-5'> <Link onClick={logout} to="/login">Logout</Link> </li>
+                            <Link to="/" id="nav-item" className={`navbar-item has-text-white ml-6 ${location.pathname === '/' ? 'is-active' : ''}`}>Home</Link>
+                            <Link to="/tablets" id="nav-item" className={`navbar-item has-text-white ${location.pathname === '/tablets' ? 'is-active' : ''}`}>Tablets</Link>
+                            <Link to="/laptops" id="nav-item" className={`navbar-item has-text-white ${location.pathname === '/laptops' ? 'is-active' : ''}`}>Laptops</Link>
+                            <Link to="/damages" id="nav-item" className={`navbar-item has-text-white ${location.pathname === '/damages' ? 'is-active' : ''}`}>Damages</Link>
                         </>
-                        : 
+                        :
                         <>
-                            <li className='is-pulled-right mr-5'><Link to="/register">SignUp</Link></li>
-                            <li className='is-pulled-right'><Link to="/login">Login</Link></li>
+                            <Link to="/" className={`navbar-item has-text-white ${location.pathname === '/' ? 'is-active' : ''}`}>Home</Link>
                         </>
-                }
-            </ul>
-        </div>
+                    }       
+                </div>
+            </div>
+            <div className="navbar-end">
+                <div className='navbar-item'>
+                    {
+                        auth ?
+                            <>
+                                <div className="buttons">
+                                    <Link onClick={logout} to="/login" className="button is-danger mr-3 is-medium">Logout</Link>
+                                </div>
+                            </>
+                            :
+                            <>
+                                <div className="buttons">
+                                    <Link to="/register" className="button is-primary mr-3 is-medium">SignUp</Link>
+                                    <Link to="/login" className="button is-light mr-3 is-medium">Login</Link>
+                                </div>
+                            </>
+                    }
+                </div> 
+            </div>
+        </nav>
+
     );
 }
 

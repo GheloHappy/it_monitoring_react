@@ -49,7 +49,7 @@ const Login = () => {
     };
 
     return (
-        <div className="container mt-5">
+        <div className="container mt-6">
             <div className="columns is-mobile is-centered ">
                 <div className="column is-one-third mt-6 box has-text-centered" id="form">
                     <h1 className="title is-1 has-text-white ">Login</h1>
@@ -63,7 +63,7 @@ const Login = () => {
                         value={password} onKeyDown={handleKeyPress}
                         onChange={(e) => setPassword(e.target.value)} />
                     {emptyPass && <div className="has-text-danger mt-1">Password cannot be blank</div>}
-                    <button onClick={handleLogin} className="button is-primary mt-5 is-medium is-fullwidth is-large"
+                    <button onClick={handleLogin} className="button is-primary mt-5 is-medium is-fullwidth"
                      id="btnSubmit">Submit</button>
                 </div>
             </div>
