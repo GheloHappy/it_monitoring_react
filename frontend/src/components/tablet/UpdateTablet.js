@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import moment from "moment";
-import { useNavigate } from "react-router";
+import { Link, useParams } from "react-router-dom";
 
-const AddTablet = () => {
-    const apiUrl = process.env.REACT_APP_API_URL;
+const UpdateTablet = () => {
+    const {id} = useParams();
+    const apiUrl = process.env.REACT_APP_API_URL + "tablets/" + id;
     const [company, setCompany] = useState("");
     const [item_name, setItemName] = useState("");
     const [model, setModel] = useState("");
@@ -11,54 +12,41 @@ const AddTablet = () => {
     const [dop, setDop] = useState("");
     const [others, setOthers] = useState("");
     const [remarks, setRemarks] = useState("");
-    const [qty, setQty] = useState("");
-    const [price, setPrice] = useState("");
-    const navigate = useNavigate();
+    const [qty, setQty] = useState(0);
+    const [price, setPrice] = useState(0);
 
-    //get date and time
-    const currentDate = new Date();
-    const date_added = moment(currentDate, "MM/DD/YYYY, HH:mm:ss").format("YYYY-MM-DD HH:mm:ss");
+    useEffect(() => {
+        fetch(apiUrl)
+          .then(res => res.json())
+          .then(data => {
+            // set state with the data received from the API
+            setCompany(data.company);
+            setItemName(data.item_name);
+            setModel(data.model);
+            setSerial(data.serial);
+            setDop(moment(data.dop).format("YYYY-MM-DD"));
+            setOthers(data.others);
+            setRemarks(data.remarks);
+            setQty(data.qty);
+            setPrice(data.price);
+            console.log(data);
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      }, [apiUrl]);
 
-    const handleInsert = async () => {
-        const requiredFields = { company, item_name, model, serial, dop, qty, price };
-        const emptyFields = Object.entries(requiredFields).filter(([key, value]) => value === "");
-        const newTabData = {
-            company,
-            item_name,
-            model,
-            serial,
-            dop,
-            others,
-            remarks,
-            qty,
-            date_added: date_added,
-            price
-        }
+      console.log(apiUrl);
 
-        if (emptyFields.length > 0) {
-            alert(`Please fill in the following fields: ${emptyFields.map(([key, value]) => key).join(", ")}`);
-            return;
-        }
-
-        let result = await fetch(apiUrl + "tablets", {
-            method: "POST",
-            headers: { "content-type": "application/json" },
-            body: JSON.stringify(newTabData),
-        });
-        result = await result.json();
-        if (result.insertId) {
-            alert('New Tablet Saved');
-            navigate('/tablets');
-        } else {
-            alert("Failed to add");
-        }
-    }
-
+      const handleUpdate = (e) => {
+        e.preventDefault();
+        // call API to update data here
+      }
     return (
         <div className="container mt-6">
             <div className="columns is-centered">
                 <div className="column mt-2 box has-text-centered mt-6" id="form">
-                    <h1 className="title is-3 has-text-white ">Add new Tablet / Accessories</h1>
+                    <h1 className="title is-3 has-text-white ">UPDATE Tablet / Accessories</h1>
                     <div className="columns is-centered">
                         <div className="column is-three-quarters is-6 is-narrow">
                             <div className="field">
@@ -66,9 +54,9 @@ const AddTablet = () => {
                                     <label className="label is-medium has-text-white has-text-left">Company</label>
                                     <div className="select is-fullwidth">
                                         <select value={company} onChange={(e) => setCompany(e.target.value)} >
-                                            <option> </option>
-                                            <option>Monheim</option>
-                                            <option>Maryland</option>
+                                            <option  value=""> </option>
+                                            <option  value="Monheim">Monheim</option>
+                                            <option  value="Maryland">Maryland</option>
                                         </select>
                                     </div>
                                 </div>
@@ -131,12 +119,12 @@ const AddTablet = () => {
                             </div>
                             <div className="columns">
                                 <div className="column is-half">
-                                    <button onClick={handleInsert} className="button is-info mt-5 is-fullwidth is-medium"
-                                    >ADD</button>
+                                    <button onClick={handleUpdate} className="button is-info mt-5 is-fullwidth is-medium"
+                                    >UPDATE</button>
                                 </div>
                                 <div className="column is-half">
-                                    <button onClick={handleInsert} className="button is-danger mt-5 is-fullwidth is-medium"
-                                    >CANCEL</button>
+                                    <Link to={"/tablets"} className="button is-danger mt-5 is-fullwidth is-medium"
+                                    >CANCEL</Link>
                                 </div>
                             </div>
                         </div>
@@ -147,4 +135,4 @@ const AddTablet = () => {
     )
 }
 
-export default AddTablet;
+export default UpdateTablet;

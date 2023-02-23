@@ -9,6 +9,10 @@ import {
 
 import {
     showTablets,
+    createTablet,
+    updateTablet,
+    destroyTablet,
+    showTabletById,
 } from "../controllers/TabletCont.js";
 
 import { loginUser, validateToken } from "../controllers/AuthCont.js";
@@ -25,5 +29,8 @@ router.post('/protected', validateToken);
 
 //tablets
 router.get("/tablets", showTablets);
-
+router.get("/tablets/:id", showTabletById);
+router.post("/tablets", createTablet);
+router.put("/tablets/:id", updateTablet);
+router.delete("/tablets/:id", destroyTablet);
 export default router;

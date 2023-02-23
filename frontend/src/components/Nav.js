@@ -4,7 +4,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 const Nav = () => {
     const auth = localStorage.getItem('user');
     const navigate = useNavigate();
-    const location = useLocation    ();
+    const location = useLocation();
     
     const logout = () => {
         localStorage.clear();
@@ -24,7 +24,7 @@ const Nav = () => {
                         </>
                         :
                         <>
-                            <Link to="/" className={`navbar-item has-text-white ${location.pathname === '/' ? 'is-active' : ''}`}>Home</Link>
+                            <Link to="/" id="nav-item" className={`navbar-item has-text-white ${location.pathname === '/' ? 'is-active' : ''}`}>Home</Link>
                         </>
                     }       
                 </div>
