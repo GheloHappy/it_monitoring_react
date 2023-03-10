@@ -1,4 +1,7 @@
 import express from "express";
+
+import { loginUser, validateToken } from "../controllers/AuthCont.js";
+
 import {
     showUsers,
     showUsersById,
@@ -15,7 +18,10 @@ import {
     showTabletById,
 } from "../controllers/TabletCont.js";
 
-import { loginUser, validateToken } from "../controllers/AuthCont.js";
+import { 
+    showLatestTranByItemId, 
+    showTabletsTransactions 
+} from "../controllers/TransactionsCont.js";
 
 const router = express.Router();
 //users
@@ -33,4 +39,8 @@ router.get("/tablets/:id", showTabletById);
 router.post("/tablets", createTablet);
 router.put("/tablets/:id", updateTablet);
 router.delete("/tablets/:id", destroyTablet);
+
+//transactions
+router.get("/transactions", showTabletsTransactions);
+router.get("/transactions/:id", showLatestTranByItemId);
 export default router;

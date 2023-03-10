@@ -38,8 +38,20 @@ export const insertTablet = (data, result) => {
 }
 
 export const updateTabletById = (data, id, result) => {
-    db.query("UPDATE tablets SET username = ?, password = ?, name = ? WHERE id = ?",
-    [data.username, data.password, data.name, id],
+    db.query("UPDATE tablets SET company = ?, item_name = ?, model = ?, serial = ?"+
+    ", dop = ?, others = ?, remarks = ?, qty = ?, price = ? WHERE id = ?",
+    [
+        data.company, 
+        data.item_name, 
+        data.model,
+        data.serial,
+        data.dop,
+        data.others,
+        data.remarks,
+        data.qty,
+        data.price,
+        id
+    ],
     (err, results) => {
         if(err) {
             console.log(err);

@@ -1,8 +1,9 @@
 import { useState } from "react";
 import moment from "moment";
 import { useNavigate } from "react-router";
+import { Link } from "react-router-dom";
 
-const AddTablet = () => {
+const AddTablet = () => { 
     const apiUrl = process.env.REACT_APP_API_URL;
     const [company, setCompany] = useState("");
     const [item_name, setItemName] = useState("");
@@ -20,7 +21,7 @@ const AddTablet = () => {
     const date_added = moment(currentDate, "MM/DD/YYYY, HH:mm:ss").format("YYYY-MM-DD HH:mm:ss");
 
     const handleInsert = async () => {
-        const requiredFields = { company, item_name, model, serial, dop, qty, price };
+        const requiredFields = { company, item_name, model, dop, qty };
         const emptyFields = Object.entries(requiredFields).filter(([key, value]) => value === "");
         const newTabData = {
             company,
@@ -135,8 +136,8 @@ const AddTablet = () => {
                                     >ADD</button>
                                 </div>
                                 <div className="column is-half">
-                                    <button onClick={handleInsert} className="button is-danger mt-5 is-fullwidth is-medium"
-                                    >CANCEL</button>
+                                    <Link to={"/tablets"} className="button is-danger mt-5 is-fullwidth is-medium"
+                                    >CANCEL</Link>
                                 </div>
                             </div>
                         </div>

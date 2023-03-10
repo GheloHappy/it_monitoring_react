@@ -17,10 +17,10 @@ const Nav = () => {
                     {
                         auth ?
                         <>
-                            <Link to="/" id="nav-item" className={`navbar-item has-text-white ml-6 ${location.pathname === '/' ? 'is-active' : ''}`}>Home</Link>
-                            <Link to="/tablets" id="nav-item" className={`navbar-item has-text-white ${location.pathname === '/tablets' ? 'is-active' : ''}`}>Tablets</Link>
-                            <Link to="/laptops" id="nav-item" className={`navbar-item has-text-white ${location.pathname === '/laptops' ? 'is-active' : ''}`}>Laptops</Link>
-                            <Link to="/damages" id="nav-item" className={`navbar-item has-text-white ${location.pathname === '/damages' ? 'is-active' : ''}`}>Damages</Link>
+                            <Link to="/" id="nav-item" className={`navbar-item has-text-white ml-5 ${location.pathname === '/' ? 'is-active' : ''}`}>Home</Link>
+                            <Link to="/tablets" id="nav-item" className={`navbar-item has-text-white ml-5 ${location.pathname === '/tablets' ? 'is-active' : ''}`}>Tablets</Link>
+                            <Link to="/laptops" id="nav-item" className={`navbar-item has-text-white ml-5 ${location.pathname === '/laptops' ? 'is-active' : ''}`}>Laptops</Link>
+                            <Link to="/damages" id="nav-item" className={`navbar-item has-text-white ml-5 ${location.pathname === '/damages' ? 'is-active' : ''}`}>Damages</Link>
                         </>
                         :
                         <>

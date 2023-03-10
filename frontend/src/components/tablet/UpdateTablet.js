@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import moment from "moment";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 const UpdateTablet = () => {
-    const {id} = useParams();
+    const { id } = useParams();
+    const navigate = useNavigate();
     const apiUrl = process.env.REACT_APP_API_URL + "tablets/" + id;
     const [company, setCompany] = useState("");
     const [item_name, setItemName] = useState("");
@@ -17,31 +18,52 @@ const UpdateTablet = () => {
 
     useEffect(() => {
         fetch(apiUrl)
-          .then(res => res.json())
-          .then(data => {
-            // set state with the data received from the API
-            setCompany(data.company);
-            setItemName(data.item_name);
-            setModel(data.model);
-            setSerial(data.serial);
-            setDop(moment(data.dop).format("YYYY-MM-DD"));
-            setOthers(data.others);
-            setRemarks(data.remarks);
-            setQty(data.qty);
-            setPrice(data.price);
-            console.log(data);
-          })
-          .catch(error => {
-            console.log(error);
-          });
-      }, [apiUrl]);
+            .then(res => res.json())
+            .then(data => {
+                // set state with the data received from the API
+                setCompany(data.company);
+                setItemName(data.item_name);
+                setModel(data.model);
+                setSerial(data.serial);
+                setDop(moment(data.dop).format("YYYY-MM-DD"));
+                setOthers(data.others);
+                setRemarks(data.remarks);
+                setQty(data.qty);
+                setPrice(data.price);
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    }, [apiUrl]);
 
-      console.log(apiUrl);
-
-      const handleUpdate = (e) => {
+    const handleUpdate = async (e) => {
         e.preventDefault();
-        // call API to update data here
-      }
+        const data = {
+            company,
+            item_name,
+            model,
+            serial,
+            dop,
+            others,
+            remarks,
+            qty,
+            price,
+        }
+        
+        fetch(apiUrl, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        })
+            .then(response => response.json())
+            .then(data => {  
+                alert('Tablet Updated');
+                navigate('/tablets');
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    }
     return (
         <div className="container mt-6">
             <div className="columns is-centered">
@@ -54,9 +76,9 @@ const UpdateTablet = () => {
                                     <label className="label is-medium has-text-white has-text-left">Company</label>
                                     <div className="select is-fullwidth">
                                         <select value={company} onChange={(e) => setCompany(e.target.value)} >
-                                            <option  value=""> </option>
-                                            <option  value="Monheim">Monheim</option>
-                                            <option  value="Maryland">Maryland</option>
+                                            <option value=""> </option>
+                                            <option value="Monheim">Monheim</option>
+                                            <option value="Maryland">Maryland</option>
                                         </select>
                                     </div>
                                 </div>

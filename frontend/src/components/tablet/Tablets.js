@@ -63,7 +63,7 @@ const Tablets = () => {
     }
 
     return (
-        <div className="container mt-6">
+        <div className="mt-6 mr-5 ml-5">
             <div className="rows is-centered ">
                 <div className="row">
                     <input className="input is-normal mt-5" type="text" placeholder="Search item name" 
@@ -88,9 +88,8 @@ const Tablets = () => {
                                 <div className="column is-one-third">
                                     <input className="input is-normal" type="date" onChange={handleDateChange} ref={dateFieldRef} />
                                 </div>
-
                                 <div className="column is-one-third">
-                                    <button className="button is-danger" onClick={handleClearFilter} >CLEAR</button>
+                                    <button className="button is-danger" onClick={handleClearFilter} >CLEAR FILTERS</button>
                                 </div>
                             </div>
                         </div>
@@ -102,6 +101,7 @@ const Tablets = () => {
                 <table className="table is-striped is-bordered is-fullwidth mt-2">
                     <thead>
                         <tr>
+                            <th className="has-text-centered">Recieve/Return</th>
                             <th className="has-text-centered">Company</th>
                             <th className="has-text-centered">Item Name</th>
                             <th className="has-text-centered">Model</th>
@@ -117,6 +117,10 @@ const Tablets = () => {
                     <tbody>
                         {sortedData.map(item => (
                             <tr key={item.id}>
+                                <td className="has-text-centered">
+                                    <Link to={`/transaction/receive/tablet/${item.id}`} className="button is-primary mr-2">RECEIVE</Link>
+                                    <Link to={`/transaction/return/tablet/${item.id}`} className="button is-danger mr-2">Return</Link>
+                                </td>
                                 <td className="has-text-centered">{item.company}</td>
                                 <td className="has-text-centered">{item.item_name}</td>
                                 <td className="has-text-centered">{item.model}</td>

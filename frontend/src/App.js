@@ -9,6 +9,7 @@ import Auth from './middleware/Auth';
 import Tablets from './components/tablet/Tablets';
 import AddTablet from './components/tablet/AddTablet';
 import UpdateTablet from './components/tablet/UpdateTablet';
+import Transaction from './components/transaction/Transaction';
 
 function App() {
   return (
@@ -22,10 +23,12 @@ function App() {
           <Route path='/logout' element={<Auth><Login /></Auth>} />
           <Route path='/register' element={<Register />} />
           <Route path='/login' element={<Login />} />
-
+          
           <Route exact path='/tablets'element = {<Auth><Tablets /></Auth>} />
           <Route exact path='/tablets/create'element = {<Auth><AddTablet /></Auth>} />
           <Route exact path='/tablets/update/:id'element = {<Auth><UpdateTablet /></Auth>} />
+
+          <Route exact path='/transaction/:action/:item_type/:id' element = {<Auth><Transaction /></Auth>} />
         </Routes>
       </BrowserRouter>
     </div>

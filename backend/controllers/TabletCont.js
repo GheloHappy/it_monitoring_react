@@ -22,7 +22,7 @@ export const showTabletById = async (req, res) => {
             if(err) {
                 res.send(err);
             } else {
-                res.json(results);
+                res.json(results[0]);
             }
         }
     );
@@ -37,17 +37,21 @@ export const createTablet = async (req, res) => {
 }
 
 export const updateTablet = async (req, res) => {
-    const data = req.params.data;
+    const data = req.body;
     const id = req.params.id;
-    updateTablet(data, id,
-        (err, results) => {
+    try {
+        // const results = await updateTabletById(data, id, );
+        // res.json(results);
+        updateTabletById(data, id, (err, results) => {
             if(err) {
                 res.send(err);
             } else {
                 res.json(results);
             }
-        }
-    );
+        })
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 }
 
 export const destroyTablet = async (req, res) => {
