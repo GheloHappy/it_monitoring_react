@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import moment from "moment";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import logUser from "../Logs.js"
 
 const UpdateTablet = () => {
     const { id } = useParams();
@@ -58,6 +59,7 @@ const UpdateTablet = () => {
             .then(response => response.json())
             .then(data => {  
                 alert('Tablet Updated');
+                logUser("UPDATE TABLET");
                 navigate('/tablets');
             })
             .catch((error) => {

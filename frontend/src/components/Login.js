@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
+import logUser from "./Logs.js"
 
 const Login = () => {
+    const apiUrl = process.env.REACT_APP_API_URL;
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [emptyUser, setEmptyUser] = useState(false);
@@ -23,7 +25,7 @@ const Login = () => {
             setEmptyUser(!username);
             setEmptyPass(!password);
         } else {
-            let result = await fetch("http://192.168.1.75:4999/login", {
+            let result = await fetch(apiUrl + "login", {
                 method: "POST",
                 headers: { "content-type": "application/json" },
                 body: JSON.stringify({ username, password }),
@@ -33,6 +35,9 @@ const Login = () => {
             if (result.name) {
                 localStorage.setItem('user', JSON.stringify(result));
                 localStorage.setItem('token', result.token);
+
+                logUser("login");
+                
                 navigate("/");
             } else {
                 alert("Username or password is incorrect.");

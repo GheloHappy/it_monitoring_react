@@ -2,8 +2,9 @@ import { useState } from "react";
 import moment from "moment";
 import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
+import logUser from "../Logs.js"
 
-const AddTablet = () => { 
+const AddTablet = () => {
     const apiUrl = process.env.REACT_APP_API_URL;
     const [company, setCompany] = useState("");
     const [item_name, setItemName] = useState("");
@@ -31,7 +32,7 @@ const AddTablet = () => {
             dop,
             others,
             remarks,
-            qty,
+            qty: 1, // Set qty to 1 for each insert
             date_added: date_added,
             price
         }
@@ -41,17 +42,30 @@ const AddTablet = () => {
             return;
         }
 
-        let result = await fetch(apiUrl + "tablets", {
-            method: "POST",
-            headers: { "content-type": "application/json" },
-            body: JSON.stringify(newTabData),
-        });
-        result = await result.json();
-        if (result.insertId) {
-            alert('New Tablet Saved');
+        const promises = [];
+        //loop insert per qty
+        for (let i = 0; i < qty; i++) {
+            promises.push(fetch(apiUrl + "tablets", {
+                method: "POST",
+                headers: { "content-type": "application/json" },
+                body: JSON.stringify(newTabData),
+            }));
+        }
+        const responses = await Promise.all(promises);
+        const results = await Promise.all(responses.map(response => response.json()));
+    
+        let allSuccess = true;
+        for (let i = 0; i < results.length; i++) {
+            const result = results[i];
+            if (!result.insertId) {
+                allSuccess = false;
+                alert(`Failed to add Tablet ${i + 1}`);
+            }
+        }
+        if (allSuccess) {
+            alert(`All ${qty} Tablets Saved`);
+            logUser("Add New Tablet : " + item_name + " : " + qty);
             navigate('/tablets');
-        } else {
-            alert("Failed to add");
         }
     }
 

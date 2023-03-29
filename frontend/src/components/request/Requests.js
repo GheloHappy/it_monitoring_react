@@ -3,18 +3,20 @@ import dateFormat from 'dateformat';
 import { Link } from "react-router-dom";
 import logUser from "../Logs.js"
 
-const Tablets = () => {
+
+const Requests = () => {
     const apiUrl = process.env.REACT_APP_API_URL;
     const [data, setData] = useState([]);
     const [searchTerm, setSearchTerm] = useState("")
     const [selectedDateField, setSelectedDateField] = useState("date_added");
     const [selectedDate, setSelectedDate] = useState("");
+    const [status, setStatus] = useState("");
 
     const searchTermRef = useRef(null);
     const dateFieldRef = useRef(null);
 
     useEffect(() => {
-        fetch(apiUrl + "tablets")
+        fetch(apiUrl + "requests")
             .then(res => res.json())
             .then(data => {
                 setData(data);
@@ -22,7 +24,7 @@ const Tablets = () => {
     }, [apiUrl]);
     //search item name filter
     const filteredData = data.filter((item) => {
-        const itemName = item.item_name.toLowerCase();
+        const itemName = item.description.toLowerCase();
         const searchTermLowerCase = searchTerm.toLowerCase();
         const dateField = FieldChange(selectedDateField);
         const itemDate = dateFormat(item[dateField], "yyyy-mm-dd");
@@ -49,21 +51,6 @@ const Tablets = () => {
         dateFieldRef.current.value = "";
     };
 
-    //handle delete item
-    const handleDelete = (id) => {
-        const confirmDelete = window.confirm("Are you sure you want to delete this item?");
-        if (confirmDelete) {
-            fetch(apiUrl + "tablets/" + id, {
-                method: "DELETE",
-            })
-                .then(() => {
-                    // remove the item from the data array
-                    setData(data.filter(item => item.id !== id));
-                    logUser("DELETE TABLET : " + id);
-                })
-                .catch(error => console.error(error));
-        }
-    }
 
     return (
         <div className="mt-6 mr-5 ml-5">
@@ -82,7 +69,7 @@ const Tablets = () => {
                                             <div className="select">
                                                 <select value={selectedDateField} onChange={handleDateFieldChange} ref={dateFieldRef}>
                                                     <option>Date Added</option>
-                                                    <option>Date Purchased</option>
+                                                    <option>Date Received</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -97,52 +84,46 @@ const Tablets = () => {
                             </div>
                         </div>
                         <div className="column is-pulled-right">
-                            <Link to={"/tablets/create"} className="button is-primary is-pulled-right">ADD NEW (+)</Link>
+                            <Link to={"/requests/create"} className="button is-primary is-pulled-right">ADD NEW (+)</Link>
                         </div>
                     </div>
                 </div>
                 <table className="table is-striped is-bordered is-fullwidth mt-2">
                     <thead>
                         <tr>
-                            <th className="has-text-centered">Recieve/Return</th>
-                            <th className="has-text-centered">Company</th>
-                            <th className="has-text-centered">Item Name</th>
-                            <th className="has-text-centered">Model</th>
-                            <th className="has-text-centered">Serial</th>
-                            <th className="has-text-centered">Date Purchased</th>
-                            <th className="has-text-centered">Date Rec/Ret</th>
-                            <th className="has-text-centered">Remarks</th>
+                            <th className="has-text-centered">id</th>
+                            <th className="has-text-centered">Department</th>
+                            <th className="has-text-centered">Date Requested</th>
                             <th className="has-text-centered">Qty</th>
-                            <th className="has-text-centered">Person Holder</th>
+                            <th className="has-text-centered">Description</th>
+                            <th className="has-text-centered">Remarks</th>
+                            <th className="has-text-centered">Pending</th>
+                            <th className="has-text-centered">Status</th>
+                            <th className="has-text-centered">Date Received</th>
                             <th className="has-text-centered">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         {sortedData.map(item => (
                             <tr key={item.id}>
-                                <td className="has-text-centered">
-                                    {item.transaction === "receive" ? (
-                                        <Link to={`/transaction/return/tablet/${item.id}`} className="button is-danger mr-2">Return</Link>
-                                    ) : (
-                                        <Link to={`/transaction/receive/tablet/${item.id}`} className="button is-primary mr-2">Receive</Link>
-                                    )}
-                                </td>
-                                <td className="has-text-centered">{item.company}</td>
-                                <td className="has-text-centered">{item.item_name}</td>
-                                <td className="has-text-centered">{item.model}</td>
-                                <td className="has-text-centered">{item.serial}</td>
-                                <td className="has-text-centered">{dateFormat(item.dop, "mm-dd-yyyy")}</td>
-                                <td className="has-text-centered">{dateFormat(item.date_recret, "mm-dd-yyyy")}</td>
-                                <td className="has-text-centered">{item.remarks}</td>
+                                <td className="has-text-centered">{item.id}</td>
+                                <td className="has-text-centered">{item.department}</td>
+                                <td className="has-text-centered">{dateFormat(item.date_requested, "mm-dd-yyyy")}</td>
                                 <td className="has-text-centered">{item.qty}</td>
-                                <td className="has-text-centered">{item.assigned_name}</td>
+                                <td className="has-text-centered">{item.description}</td>
+                                <td className="has-text-centered">{item.remarks}</td>
+                                <td className="has-text-centered">{item.pending}</td>
+                                {item.date_received === null ? <>
+                                        <td className="has-text-centered has-text-success">Requested</td>
+                                        <td className="has-text-centered"></td>
+                                    </> : <>
+                                        <td className="has-text-centered has-text-red">Done</td>
+                                        <td className="has-text-centered">{dateFormat(item.date_received, "mm-dd-yyyy")}</td>
+                                    </>
+                                }
                                 <td className="has-text-centered">
-                                    {!item.transaction &&
-                                        <>
-                                            <Link to={`/tablets/update/${item.id}`} className="button is-primary mr-2">UPDATE</Link>
-                                            <button className="button is-danger" onClick={() => handleDelete(item.id)}>DELETE</button>
-                                        </>
-                                    }
+                                    <Link to={`/tablets/update/${item.id}`} className="button is-primary mr-2">UPDATE</Link>
+                                    {/* <button className="button is-danger" onClick={() => handleDelete(item.id)}>DELETE</button> */}
                                 </td>
                             </tr>
                         ))}
@@ -152,17 +133,13 @@ const Tablets = () => {
         </div>
     )
 
-    // function formatNumber(num, decimalPlaces) {
-    //     return num.toFixed(decimalPlaces);
-    // }
-
     function FieldChange(field) {
         if (field === "Date Added")
             field = "date_added"
-        else field = "dop"
+        else field = "date_received"
 
         return field;
     }
 }
 
-export default Tablets;
+export default Requests;

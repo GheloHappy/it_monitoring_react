@@ -16,12 +16,20 @@ import {
     updateTablet,
     destroyTablet,
     showTabletById,
+    showTabletInventory,
 } from "../controllers/TabletCont.js";
 
+import {
+    createRequest,
+    showRequests,
+} from "../controllers/RequestsCont.js";
+
 import { 
+    createTransaction,
     showLatestTranByItemId, 
-    showTabletsTransactions 
 } from "../controllers/TransactionsCont.js";
+
+import { createLog, showLogs } from "../controllers/LogsCont.js";
 
 const router = express.Router();
 //users
@@ -29,7 +37,7 @@ router.get("/users", showUsers);
 router.get("/users:id", showUsersById);
 router.post("/user", createUser);
 router.put("/users:id", updateUser);
-router.delete("/users:id", destroyUser);
+router.delete("/users/:id", destroyUser);
 router.post('/login', loginUser);
 router.post('/protected', validateToken);
 
@@ -40,7 +48,19 @@ router.post("/tablets", createTablet);
 router.put("/tablets/:id", updateTablet);
 router.delete("/tablets/:id", destroyTablet);
 
+//requests
+router.get("/requests", showRequests);
+router.post("/request", createRequest);
+
 //transactions
-router.get("/transactions", showTabletsTransactions);
+//router.get("/transactions", showTabletsTransactions);
 router.get("/transactions/:id", showLatestTranByItemId);
+router.post("/transaction", createTransaction);
+
+//inventory
+router.get("/inventory", showTabletInventory);
+
+//logs
+router.get("/logs", showLogs);
+router.post("/log", createLog);
 export default router;

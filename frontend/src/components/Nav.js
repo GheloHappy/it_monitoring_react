@@ -18,9 +18,12 @@ const Nav = () => {
                         auth ?
                         <>
                             <Link to="/" id="nav-item" className={`navbar-item has-text-white ml-5 ${location.pathname === '/' ? 'is-active' : ''}`}>Home</Link>
-                            <Link to="/tablets" id="nav-item" className={`navbar-item has-text-white ml-5 ${location.pathname === '/tablets' ? 'is-active' : ''}`}>Tablets</Link>
+                            <Link to="/tablets" id="nav-item" className={`navbar-item has-text-white ml-5 ${location.pathname.startsWith('/tablets') ? 'is-active' : ''}`}>Tablets</Link>
                             <Link to="/laptops" id="nav-item" className={`navbar-item has-text-white ml-5 ${location.pathname === '/laptops' ? 'is-active' : ''}`}>Laptops</Link>
+                            <Link to="/requests" id="nav-item" className={`navbar-item has-text-white ml-5 ${location.pathname === '/requests' ? 'is-active' : ''}`}>Requests</Link>
+                            <Link to="/inventory" id="nav-item" className={`navbar-item has-text-white ml-5 ${location.pathname === '/inventory' ? 'is-active' : ''}`}>Inventory</Link>
                             <Link to="/damages" id="nav-item" className={`navbar-item has-text-white ml-5 ${location.pathname === '/damages' ? 'is-active' : ''}`}>Damages</Link>
+                            <Link to="/history" id="nav-item" className={`navbar-item has-text-white ml-5 ${location.pathname === '/history' ? 'is-active' : ''}`}>History</Link>
                         </>
                         :
                         <>

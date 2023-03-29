@@ -9,7 +9,10 @@ import Auth from './middleware/Auth';
 import Tablets from './components/tablet/Tablets';
 import AddTablet from './components/tablet/AddTablet';
 import UpdateTablet from './components/tablet/UpdateTablet';
+import Requests from './components/request/Requests';
+import CreateRequest from './components/request/CreateRequest';
 import Transaction from './components/transaction/Transaction';
+import Inventory from './components/inventory/Inventory';
 
 function App() {
   return (
@@ -28,7 +31,12 @@ function App() {
           <Route exact path='/tablets/create'element = {<Auth><AddTablet /></Auth>} />
           <Route exact path='/tablets/update/:id'element = {<Auth><UpdateTablet /></Auth>} />
 
+          <Route exact path='/requests'element = {<Auth><Requests /></Auth>} />
+          <Route exact path='/requests/create'element = {<Auth><CreateRequest /></Auth>} />
+
           <Route exact path='/transaction/:action/:item_type/:id' element = {<Auth><Transaction /></Auth>} />
+
+          <Route exact path='/inventory' element={<Auth><Inventory /></Auth>} />
         </Routes>
       </BrowserRouter>
     </div>

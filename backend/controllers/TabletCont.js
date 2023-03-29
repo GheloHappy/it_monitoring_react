@@ -4,6 +4,7 @@ import {
     updateTabletById,
     deleteTablet,
     getTabletById,
+    getTabletsInventory,
 } from "../models/TabletsModel.js";
 
 export const showTablets = async (req, res) => {
@@ -26,6 +27,16 @@ export const showTabletById = async (req, res) => {
             }
         }
     );
+}
+
+export const showTabletInventory = async (req, res) => {
+    getTabletsInventory((err, results) => {
+        if(err) {
+            res.send(err);
+        } else {
+            res.json(results);
+        }
+    });
 }
 
 export const createTablet = async (req, res) => {
