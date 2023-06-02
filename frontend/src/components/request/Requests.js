@@ -1,8 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import dateFormat from 'dateformat';
 import { Link } from "react-router-dom";
-import logUser from "../Logs.js"
-
+//import { jsPDF } from "jspdf";
 
 const Requests = () => {
     const apiUrl = process.env.REACT_APP_API_URL;
@@ -10,7 +9,6 @@ const Requests = () => {
     const [searchTerm, setSearchTerm] = useState("")
     const [selectedDateField, setSelectedDateField] = useState("date_added");
     const [selectedDate, setSelectedDate] = useState("");
-    const [status, setStatus] = useState("");
 
     const searchTermRef = useRef(null);
     const dateFieldRef = useRef(null);
@@ -30,7 +28,10 @@ const Requests = () => {
         const itemDate = dateFormat(item[dateField], "yyyy-mm-dd");
         return itemName.includes(searchTermLowerCase) && (!selectedDate || itemDate === selectedDate);
     });
-    const sortedData = filteredData.sort((a, b) => a.item_name.localeCompare(b.item_name));
+    const sortedData = filteredData
+        .filter(item => item.description) // Filter out items where item_name is undefined
+        //.sort((a, b) => a.description.localeCompare(b.description));
+        .sort((a, b) => new Date(b.date_requested) - new Date(a.date_requested));
     const handleSearchTermChange = (event) => {
         setSearchTerm(event.target.value);
     }
@@ -45,12 +46,36 @@ const Requests = () => {
 
     const handleClearFilter = () => {
         setSearchTerm("");
-        setSelectedDateField("date_added");
+        setSelectedDateField("date_requested");
         setSelectedDate("");
         searchTermRef.current.value = "";
         dateFieldRef.current.value = "";
     };
 
+    // const generatePDF = () => {
+    //     var header = new Image();
+    //     header.src = require('../../img/header.png');
+    //     const doc = new jsPDF();
+
+    //     header.onload = function () {
+    //         doc.setFontSize(12);
+    //         const imageWidth = doc.internal.pageSize.getWidth(); // Get the width of the page
+    //         const imageHeight = (header.height * imageWidth) / header.width; // Calculate height based on aspect ratio
+
+    //         doc.addImage(header, 'PNG', 10, 10, 100, 50);
+
+    //         // Insert values from your system dynamically
+    //         //   let startY = 20;
+    //         //   data.forEach(item => {
+    //         //     doc.text(`ID: ${item.id}`, 10, startY);
+    //         //     doc.text(`Department: ${item.department}`, 30, startY);
+    //         //     startY += 10; // Increment startY for the next item
+    //         //   });
+
+    //         // Save or open the PDF document
+    //         doc.save("test.pdf");
+    //     };
+    // };
 
     return (
         <div className="mt-6 mr-5 ml-5">
@@ -68,7 +93,7 @@ const Requests = () => {
                                         <div className="control">
                                             <div className="select">
                                                 <select value={selectedDateField} onChange={handleDateFieldChange} ref={dateFieldRef}>
-                                                    <option>Date Added</option>
+                                                    <option>Date Requested</option>
                                                     <option>Date Received</option>
                                                 </select>
                                             </div>
@@ -114,17 +139,19 @@ const Requests = () => {
                                 <td className="has-text-centered">{item.remarks}</td>
                                 <td className="has-text-centered">{item.pending}</td>
                                 {item.date_received === null ? <>
-                                        <td className="has-text-centered has-text-success">Requested</td>
-                                        <td className="has-text-centered"></td>
-                                    </> : <>
-                                        <td className="has-text-centered has-text-red">Done</td>
-                                        <td className="has-text-centered">{dateFormat(item.date_received, "mm-dd-yyyy")}</td>
-                                    </>
+                                    <td className="has-text-centered has-text-success">Requested</td>
+                                    <td className="has-text-centered"></td>
+                                    <td className="has-text-centered">
+                                        <Link to={`/requests/update/${item.id}`} className="button is-primary mr-2 mt-1">UPDATE</Link>
+                                        <Link to={`/requests/print/${item.id}`} className="button is-info mr-2 mt-1">PRINT</Link>
+                                        {/* <button className="button is-info mt-1" onClick={generatePDF}>PRINT</button> */}
+                                    </td>
+                                </> : <>
+                                    <td className="has-text-centered has-text-danger">Done</td>
+                                    <td className="has-text-centered">{dateFormat(item.date_received, "mm-dd-yyyy")}</td>
+                                </>
                                 }
-                                <td className="has-text-centered">
-                                    <Link to={`/tablets/update/${item.id}`} className="button is-primary mr-2">UPDATE</Link>
-                                    {/* <button className="button is-danger" onClick={() => handleDelete(item.id)}>DELETE</button> */}
-                                </td>
+
                             </tr>
                         ))}
                     </tbody>

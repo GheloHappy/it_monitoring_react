@@ -22,6 +22,8 @@ import {
 import {
     createRequest,
     showRequests,
+    showRequestsById,
+    updateRequest,
 } from "../controllers/RequestsCont.js";
 
 import { 
@@ -50,7 +52,9 @@ router.delete("/tablets/:id", destroyTablet);
 
 //requests
 router.get("/requests", showRequests);
+router.get("/requests/:id", showRequestsById);
 router.post("/request", createRequest);
+router.put("/request/:id", updateRequest);
 
 //transactions
 //router.get("/transactions", showTabletsTransactions);

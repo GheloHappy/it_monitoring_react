@@ -44,7 +44,8 @@ const Nav = () => {
                             :
                             <>
                                 <div className="buttons">
-                                    <Link to="/register" className="button is-primary mr-3 is-medium">SignUp</Link>
+                                    {/* Uncomment to enable signing up */}
+                                    <Link to="/register" className="button is-primary mr-3 is-medium">SignUp</Link> 
                                     <Link to="/login" className="button is-light mr-3 is-medium">Login</Link>
                                 </div>
                             </>
