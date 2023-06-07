@@ -1,9 +1,20 @@
+import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import logo from '../../img/mon-logo.png'
+import moment from "moment";
 
 export const PrintRequest = () => {
-    // const handlePrint = () => {
-    //     window.print();
-    // };
+    const { id } = useParams();
+    const apiUrl = process.env.REACT_APP_API_URL + "requests/" + id;
+    const [data, setData] = useState([]);
+
+    useEffect(() => {
+        fetch(apiUrl)
+            .then(res => res.json())
+            .then(data => {
+                setData(data);
+            });
+    }, [apiUrl]);
 
     return (
         <div className='container has-background-white'>
@@ -35,7 +46,9 @@ export const PrintRequest = () => {
                             <div className='column is-4 mt-5'>
                                 <div className='rows'>
                                     <div className='row'>
-                                        <h1 className='has-text-black is-size-7'>Date Requested: </h1>
+                                        <h1 className='has-text-black is-size-7'>
+                                            Date Requested: {data ? <span>{moment(data.date_requested).format("MM/DD/YYYY")}</span> : null}
+                                        </h1>
                                     </div>
                                     <div className='row mt-1'>
                                         <h1 className='has-text-black is-size-7'>Date Needed: </h1>
@@ -53,8 +66,71 @@ export const PrintRequest = () => {
                     <div className='row mt-1'>
                         <h1 className='has-text-black is-size-5 has-text-centered custom-border'> PURCHASE REQUEST FORM</h1>
                     </div>
+                    <div className='row custom-border'>
+                        <h1 className='has-text-black is-size-5 has-text-centered'>FROM (Department): {data ? <span>{data.department}</span> : null}</h1>
+                    </div>
+                    <div className="row">
+                        <table className="table is-striped is-bordered is-fullwidth">
+                            <thead>
+                                <tr>
+                                    <th className="has-text-centered">ON HAND</th>
+                                    <th className="has-text-centered">QTY</th>
+                                    <th className="has-text-centered">UOM</th>
+                                    <th className="has-text-centered">BRAND</th>
+                                    <th className="has-text-centered">DESCRIPTION/s</th>
+                                    <th className="has-text-centered">END INV</th>
+                                    <th className="has-text-centered">UNIT PRICE</th>
+                                    <th className="has-text-centered">TOTAL AMOUNT</th>
+                                    <th className="has-text-centered">REMARKS</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr key={data}>
+                                    <td className="has-text-centered"></td>
+                                    <td className="has-text-centered">{data.qty}</td>
+                                    <td className="has-text-centered"></td>
+                                    <td className="has-text-centered"></td>
+                                    <td className="has-text-centered">{data.description}</td>
+                                    <td className="has-text-centered"></td>
+                                    <td className="has-text-centered"></td>
+                                    <td className="has-text-centered"></td>
+                                    <td className="has-text-centered">{data.remarks}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div className='row'>
+                        <h1 className='has-text-black is-size-6 has-text-left custom-border'>Purpose / Project : {data ? <span>{data.remarks}</span> : null}</h1>
+                    </div>
                     <div className='row mt-1'>
-                        <h1 className='has-text-black is-size-5 has-text-centered'>FROM (Department): </h1>
+                        <div className="columns">
+                            <div className="column">
+                                <h1 className="has-text-black is-size-7 has-text-left ">PREPARED BY : <span className="is-underlined">TEST</span> </h1>
+                            </div>
+                            <div className="column">
+                                <h1 className="has-text-black is-size-7 has-text-left">NOTED BY : ________________________________</h1>
+                                <h1 className="has-text-black is-size-7 has-text-centered">Supervisor/ Manager</h1>
+                            </div>
+                            <div className="column">
+                                <h1 className="has-text-black is-size-7 has-text-left">________________________________________________</h1>
+                                <h1 className="has-text-black is-size-7 has-text-centered">Purchasing Officer</h1>
+                            </div>
+                        </div>
+                    </div>
+                    <div className='row'>
+                        <div className="columns">
+                            <div className="column">
+                                <h1 className="has-text-black is-size-7 has-text-left mt-2">NOTED BY : __________________________________________</h1>
+                                <h1 className="has-text-black is-size-7 has-text-centered">Signature Over Printed Name</h1>
+                            </div>
+                            <div className="column">
+                                <h1 className="has-text-black is-size-7 has-text-left mt-2">APPROVED BY : _________________________________________________</h1>
+                                <h1 className="has-text-black is-size-7 has-text-centered">BOD</h1>
+                            </div>
+                            <div className="column">
+                                
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
