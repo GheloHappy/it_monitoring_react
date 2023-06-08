@@ -1,24 +1,49 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import logUser from "../Logs.js"
 
 
 const CreateRequest = () => {
     const apiUrl = process.env.REACT_APP_API_URL;
+    const [currentId, setCurrentId] = useState('');
+    const [curentItems, setCurrentItems] = useState([]);
     const [department, setDepartment] = useState("");
     const [date_requested, setDateRequested] = useState("");
     const [description, setDescription] = useState("");
     const [qty, setQty] = useState("");
     const [remarks, setRemarks] = useState("");
+    const [purpose, setPurpose] = useState("");
     const navigate = useNavigate();
 
+    const userLocal = localStorage.getItem('user');
+    const userData = JSON.parse(userLocal);
+    const input_user = userData.name;
+
+    useEffect(() => {
+        fetch(apiUrl + "request/currentid")
+            .then(res => res.json())
+            .then(data => {
+                const id = data.latest_id;
+                setCurrentId("IT" + id + getCurrentId());
+            });
+    }, [apiUrl]);
+
+    const handleAddItem = () => {
+        fetch(apiUrl + "request/currentid")
+            .then(res => res.json())
+            .then(data => {
+                setCurrentItems(data);
+            });
+    }
+
     const handleInsert = async () => {
-        const requiredFields = { department, date_requested, description, qty};
+        const requiredFields = { department, date_requested, description, qty, purpose };
         const emptyFields = Object.entries(requiredFields).filter(([key, value]) => value === "");
         const data = {
             ...requiredFields,
             remarks,
+            input_user,
         }
 
         if (emptyFields.length > 0) {
@@ -45,7 +70,7 @@ const CreateRequest = () => {
         <div className="container mt-6">
             <div className="columns is-centered">
                 <div className="column mt-2 box has-text-centered mt-6" id="form">
-                    <h1 className="title is-3 has-text-white ">New Request</h1>
+                    <h1 className="title is-3 has-text-white ">New Request - {currentId}</h1>
                     <div className="columns is-centered">
                         <div className="column is-three-quarters is-6 is-narrow">
                             <div className="field">
@@ -60,6 +85,13 @@ const CreateRequest = () => {
                                     <label className="label is-medium has-text-white has-text-left">Date Requested</label>
                                     <input className="input" type="date"
                                         value={date_requested} onChange={(e) => setDateRequested(e.target.value)} />
+                                </div>
+                            </div>
+                            <div className="field">
+                                <div className="control">
+                                    <label className="label is-medium has-text-white has-text-left">Purpose / Project</label>
+                                    <input className="input" type="text" placeholder="Enter Purpose"
+                                        value={purpose} onChange={(e) => setPurpose(e.target.value)} />
                                 </div>
                             </div>
                             <div className="field">
@@ -93,12 +125,33 @@ const CreateRequest = () => {
                                     >CANCEL</Link>
                                 </div>
                             </div>
+                            <table>
+                                
+                            </table>
+                            <div className="columns">
+                                <div className="column is-fullwidth">
+                                    <button className="button is-success mt-5 is-fullwidth is-medium"
+                                    >SAVE</button>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     )
+
+
+    function getCurrentId() {
+        const currentDate = new Date();
+        const year = currentDate.getFullYear();
+        const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+        const day = String(currentDate.getDate()).padStart(2, '0');
+        const formattedDate = `${year}${month}${day}`;
+
+        return formattedDate;
+    }
 }
 
 export default CreateRequest;

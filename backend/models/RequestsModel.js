@@ -1,7 +1,7 @@
 import db from "../config/database.js";
 
 export const getRequests= (result) => {
-    db.query("SELECT * FROM requests ORDER BY date_requested DESC",
+    db.query("SELECT * FROM requests_header ORDER BY date_requested DESC",
     (err,results) => {
         if(err) {
             console.log(err);
@@ -13,7 +13,7 @@ export const getRequests= (result) => {
 }
 
 export const getRequestsById = (id, result) => {
-    db.query("SELECT * FROM requests WHERE id = ?ORDER BY date_requested DESC",
+    db.query("SELECT * FROM requests_header WHERE id = ?ORDER BY date_requested DESC",
     [id], 
     (err, results) => {
         if(err) {
@@ -25,9 +25,33 @@ export const getRequestsById = (id, result) => {
     });
 }
 
+export const getRequestLatestId = (result) => {
+    db.query("SELECT MAX(id) AS latest_id FROM requests_header",
+    (err, results) => {
+        if(err) {
+            console.log(err);
+            result(err, null);
+        } else {
+            result(null, results);
+        }
+    });
+}
 
 export const insertRequest = (data, result) => {
-    db.query("INSERT INTO requests SET ?", 
+    db.query("INSERT INTO requests_header SET ?", 
+    [data],
+    (err, results) => { 
+        if(err) {
+            console.log(err);
+            result(err, null);
+        } else {
+            result(null, results);
+        }
+    });
+}
+
+export const insertRequestItem = (data, result) => {
+    db.query("INSERT INTO requests_line SET ?", 
     [data],
     (err, results) => { 
         if(err) {
@@ -40,7 +64,7 @@ export const insertRequest = (data, result) => {
 }
 
 export const updateRequestById = (data, id, result) => {
-    db.query("UPDATE requests SET date_received = ?, pending = ? WHERE id = ?",
+    db.query("UPDATE requests_header SET date_received = ?, pending = ? WHERE id = ?",
     [
         data.date_received,
         data.pending,

@@ -1,5 +1,6 @@
 import {
-    getRequests, getRequestsById, insertRequest, updateRequestById,
+    getRequestLatestId,
+    getRequests, getRequestsById, insertRequest, insertRequestItem, updateRequestById,
 } from "../models/RequestsModel.js";
 
 export const showRequests = async (req, res) => {
@@ -24,6 +25,16 @@ export const showRequestsById = async (req, res) => {
     );
 }
 
+export const showRequestLatestId = async (req, res) => {
+    getRequestLatestId((err, results) => {
+        if(err) {
+            res.send(err);
+        } else {
+            res.json(results[0]);
+        }
+    });
+}
+
 export const createRequest= async (req, res) => {
     const data = req.body;
     insertRequest(data, (err, results) => {
@@ -31,6 +42,15 @@ export const createRequest= async (req, res) => {
         else res.json(results);
     })
 }
+
+export const createRequestItem = async (req, res) => {
+    const data = req.body;
+    insertRequestItem(data, (err, results) => {
+        if(err) res.send(err);
+        else res.json(results);
+    })
+}
+
 
 
 export const updateRequest = async (req, res) => {

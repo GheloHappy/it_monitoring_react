@@ -24,7 +24,7 @@ export const PrintRequest = () => {
                         <div className="columns mt-1">
                             <div className='column is-5 mt-3'>
                                 <figure className="image is-256x256">
-                                    <img src={logo} />
+                                    <img src={logo} alt='monheim logo' />
                                 </figure>
                             </div>
                             <div className='column is-3 mt-5'>
@@ -67,10 +67,10 @@ export const PrintRequest = () => {
                         <h1 className='has-text-black is-size-5 has-text-centered custom-border'> PURCHASE REQUEST FORM</h1>
                     </div>
                     <div className='row custom-border'>
-                        <h1 className='has-text-black is-size-5 has-text-centered'>FROM (Department): {data ? <span>{data.department}</span> : null}</h1>
+                        <h1 className='has-text-black is-size-6 has-text-centered'>FROM (Department): {data ? <span>{data.department}</span> : null}</h1>
                     </div>
                     <div className="row">
-                        <table className="table is-striped is-bordered is-fullwidth">
+                        <table className="table is-striped is-bordered is-fullwidth ">
                             <thead>
                                 <tr>
                                     <th className="has-text-centered">ON HAND</th>
@@ -100,12 +100,12 @@ export const PrintRequest = () => {
                         </table>
                     </div>
                     <div className='row'>
-                        <h1 className='has-text-black is-size-6 has-text-left custom-border'>Purpose / Project : {data ? <span>{data.remarks}</span> : null}</h1>
+                        <h1 className='has-text-black is-size-6 has-text-left custom-border'>Purpose / Project : {data ? <span>{data.purpose}</span> : null}</h1>
                     </div>
                     <div className='row mt-1'>
                         <div className="columns">
                             <div className="column">
-                                <h1 className="has-text-black is-size-7 has-text-left ">PREPARED BY : <span className="is-underlined">TEST</span> </h1>
+                                <h1 className="has-text-black is-size-7 has-text-left ">PREPARED BY : {data ? <span className="is-underlined is-size-6">{data.input_user}</span> : null} </h1>
                             </div>
                             <div className="column">
                                 <h1 className="has-text-black is-size-7 has-text-left">NOTED BY : ________________________________</h1>
@@ -126,9 +126,6 @@ export const PrintRequest = () => {
                             <div className="column">
                                 <h1 className="has-text-black is-size-7 has-text-left mt-2">APPROVED BY : _________________________________________________</h1>
                                 <h1 className="has-text-black is-size-7 has-text-centered">BOD</h1>
-                            </div>
-                            <div className="column">
-                                
                             </div>
                         </div>
                     </div>

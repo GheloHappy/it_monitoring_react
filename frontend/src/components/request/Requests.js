@@ -122,6 +122,7 @@ const Requests = () => {
                             <th className="has-text-centered">Qty</th>
                             <th className="has-text-centered">Description</th>
                             <th className="has-text-centered">Remarks</th>
+                            <th className="has-text-centered">Purpose</th>
                             <th className="has-text-centered">Pending</th>
                             <th className="has-text-centered">Status</th>
                             <th className="has-text-centered">Date Received</th>
@@ -137,13 +138,14 @@ const Requests = () => {
                                 <td className="has-text-centered">{item.qty}</td>
                                 <td className="has-text-centered">{item.description}</td>
                                 <td className="has-text-centered">{item.remarks}</td>
+                                <td className="has-text-centered">{item.purpose}</td>
                                 <td className="has-text-centered">{item.pending}</td>
                                 {item.date_received === null ? <>
                                     <td className="has-text-centered has-text-success">Requested</td>
                                     <td className="has-text-centered"></td>
                                     <td className="has-text-centered">
                                         <Link to={`/requests/update/${item.id}`} className="button is-primary mr-2 mt-1">UPDATE</Link>
-                                        <Link to={`/requests/print/${item.id}`} className="button is-info mr-2 mt-1">PRINT</Link>
+                                        <Link to={`/requests/print/${item.id}`} className="button is-info mr-2 mt-1" target="_blank" rel="noopener noreferrer">PRINT</Link>
                                         {/* <button className="button is-info mt-1" onClick={generatePDF}>PRINT</button> */}
                                     </td>
                                 </> : <>

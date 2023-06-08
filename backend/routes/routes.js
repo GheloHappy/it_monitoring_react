@@ -21,6 +21,8 @@ import {
 
 import {
     createRequest,
+    createRequestItem,
+    showRequestLatestId,
     showRequests,
     showRequestsById,
     updateRequest,
@@ -53,7 +55,9 @@ router.delete("/tablets/:id", destroyTablet);
 //requests
 router.get("/requests", showRequests);
 router.get("/requests/:id", showRequestsById);
+router.get("/request/currentid", showRequestLatestId);
 router.post("/request", createRequest);
+router.post("/request/item", createRequestItem);
 router.put("/request/:id", updateRequest);
 
 //transactions
