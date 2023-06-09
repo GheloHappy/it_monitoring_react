@@ -1,6 +1,6 @@
 import {
     getRequestLatestId,
-    getRequests, getRequestsById, insertRequest, insertRequestItem, updateRequestById,
+    getRequests, getRequestsById, getRequestsByRef, insertRequest, insertRequestItem, updateRequestById,
 } from "../models/RequestsModel.js";
 
 export const showRequests = async (req, res) => {
@@ -25,6 +25,19 @@ export const showRequestsById = async (req, res) => {
     );
 }
 
+export const showRequestsByRef = async (req, res) => {
+    getRequestsByRef(req.params.id, 
+        (err, results) => {
+            if(err) {
+                res.send(err);
+            } else {
+                res.json(results[0]);
+            }
+        }
+    );
+}
+
+
 export const showRequestLatestId = async (req, res) => {
     getRequestLatestId((err, results) => {
         if(err) {
@@ -35,13 +48,22 @@ export const showRequestLatestId = async (req, res) => {
     });
 }
 
-export const createRequest= async (req, res) => {
+// export const createRequest= async (req, res) => {
+//     const data = req.body;
+//     insertRequest(data, (err, results) => {
+//         if(err) res.send(err);
+//         else res.json(results);
+//     })
+// }
+
+
+export const createRequest = async (req, res) => {
     const data = req.body;
     insertRequest(data, (err, results) => {
-        if(err) res.send(err);
-        else res.json(results);
-    })
-}
+      if (err) res.send(err);
+      else res.json(results);
+    });
+  };
 
 export const createRequestItem = async (req, res) => {
     const data = req.body;

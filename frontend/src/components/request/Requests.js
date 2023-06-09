@@ -132,7 +132,7 @@ const Requests = () => {
                     <tbody>
                         {sortedData.map(item => (
                             <tr key={item.id}>
-                                <td className="has-text-centered">{item.id}</td>
+                                <td className="has-text-centered">{item.refnbr}</td>
                                 <td className="has-text-centered">{item.department}</td>
                                 <td className="has-text-centered">{dateFormat(item.date_requested, "mm-dd-yyyy")}</td>
                                 <td className="has-text-centered">{item.qty}</td>
@@ -145,7 +145,7 @@ const Requests = () => {
                                     <td className="has-text-centered"></td>
                                     <td className="has-text-centered">
                                         <Link to={`/requests/update/${item.id}`} className="button is-primary mr-2 mt-1">UPDATE</Link>
-                                        <Link to={`/requests/print/${item.id}`} className="button is-info mr-2 mt-1" target="_blank" rel="noopener noreferrer">PRINT</Link>
+                                        <Link to={`/requests/print/${item.refnbr}`} className="button is-info mr-2 mt-1" target="_blank" rel="noopener noreferrer">PRINT</Link>
                                         {/* <button className="button is-info mt-1" onClick={generatePDF}>PRINT</button> */}
                                     </td>
                                 </> : <>

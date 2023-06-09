@@ -25,6 +25,7 @@ import {
     showRequestLatestId,
     showRequests,
     showRequestsById,
+    showRequestsByRef,
     updateRequest,
 } from "../controllers/RequestsCont.js";
 
@@ -55,6 +56,7 @@ router.delete("/tablets/:id", destroyTablet);
 //requests
 router.get("/requests", showRequests);
 router.get("/requests/:id", showRequestsById);
+router.get("/requests/ref/:id", showRequestsByRef);
 router.get("/request/currentid", showRequestLatestId);
 router.post("/request", createRequest);
 router.post("/request/item", createRequestItem);

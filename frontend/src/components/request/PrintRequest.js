@@ -5,7 +5,7 @@ import moment from "moment";
 
 export const PrintRequest = () => {
     const { id } = useParams();
-    const apiUrl = process.env.REACT_APP_API_URL + "requests/" + id;
+    const apiUrl = process.env.REACT_APP_API_URL + "requests/ref/" + id;
     const [data, setData] = useState([]);
 
     useEffect(() => {

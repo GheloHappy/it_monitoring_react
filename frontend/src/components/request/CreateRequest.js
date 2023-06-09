@@ -7,7 +7,7 @@ import logUser from "../Logs.js"
 const CreateRequest = () => {
     const apiUrl = process.env.REACT_APP_API_URL;
     const [currentId, setCurrentId] = useState('');
-    const [curentItems, setCurrentItems] = useState([]);
+    const [tableData, setTableData] = useState([]);
     const [department, setDepartment] = useState("");
     const [date_requested, setDateRequested] = useState("");
     const [description, setDescription] = useState("");
@@ -24,30 +24,52 @@ const CreateRequest = () => {
         fetch(apiUrl + "request/currentid")
             .then(res => res.json())
             .then(data => {
-                const id = data.latest_id;
+                var id = 0;
+                if(data.latest_id != null) {
+                    id = data.latest_id;
+                }
                 setCurrentId("IT" + id + getCurrentId());
             });
     }, [apiUrl]);
 
     const handleAddItem = () => {
-        fetch(apiUrl + "request/currentid")
-            .then(res => res.json())
-            .then(data => {
-                setCurrentItems(data);
-            });
+        const newRow = { qty, description, remarks };
+        setTableData([...tableData, newRow]);
+        setQty('');
+        setDescription('');
+        setRemarks('');
     }
 
+    const handleDelete = (index) => {
+        const updatedTableData = [...tableData];
+        updatedTableData.splice(index, 1);
+        setTableData(updatedTableData);
+      };
+
     const handleInsert = async () => {
-        const requiredFields = { department, date_requested, description, qty, purpose };
+        const requiredFields = { department, date_requested, purpose };
         const emptyFields = Object.entries(requiredFields).filter(([key, value]) => value === "");
         const data = {
             ...requiredFields,
-            remarks,
+            items: tableData,
             input_user,
+            refnbr: currentId,
         }
+
+        const checkTableData = () => {
+            if (tableData.length === 0) {
+                alert('Please add data to the table.');
+                return false;
+            }
+            return true;
+        };
 
         if (emptyFields.length > 0) {
             alert(`Please fill in the following fields: ${emptyFields.map(([key, value]) => key).join(", ")}`);
+            return;
+        }
+
+        if (!checkTableData()) {
             return;
         }
 
@@ -75,27 +97,6 @@ const CreateRequest = () => {
                         <div className="column is-three-quarters is-6 is-narrow">
                             <div className="field">
                                 <div className="control">
-                                    <label className="label is-medium has-text-white has-text-left">Department</label>
-                                    <input className="input" type="text" placeholder="Enter Department"
-                                        value={department} onChange={(e) => setDepartment(e.target.value)} />
-                                </div>
-                            </div>
-                            <div className="field">
-                                <div className="control">
-                                    <label className="label is-medium has-text-white has-text-left">Date Requested</label>
-                                    <input className="input" type="date"
-                                        value={date_requested} onChange={(e) => setDateRequested(e.target.value)} />
-                                </div>
-                            </div>
-                            <div className="field">
-                                <div className="control">
-                                    <label className="label is-medium has-text-white has-text-left">Purpose / Project</label>
-                                    <input className="input" type="text" placeholder="Enter Purpose"
-                                        value={purpose} onChange={(e) => setPurpose(e.target.value)} />
-                                </div>
-                            </div>
-                            <div className="field">
-                                <div className="control">
                                     <label className="label is-medium has-text-white has-text-left">Qty</label>
                                     <input className="input" type="number"
                                         value={qty} onChange={(e) => setQty(e.target.value)} />
@@ -117,25 +118,65 @@ const CreateRequest = () => {
                             </div>
                             <div className="columns">
                                 <div className="column is-half">
-                                    <button onClick={handleInsert} className="button is-info mt-5 is-fullwidth is-medium"
+                                    <button onClick={handleAddItem} className="button is-info mt-1 is-fullwidth is-medium"
                                     >ADD</button>
                                 </div>
                                 <div className="column is-half">
-                                    <Link to={"/requests"} className="button is-danger mt-5 is-fullwidth is-medium"
+                                    <Link to={"/requests"} className="button is-danger mt-1 is-fullwidth is-medium"
                                     >CANCEL</Link>
                                 </div>
                             </div>
-                            <table>
-                                
-                            </table>
+                            <div className="field">
+                                <div className="control">
+                                    <label className="label is-medium has-text-white has-text-left">Department</label>
+                                    <input className="input" type="text" placeholder="Enter Department"
+                                        value={department} onChange={(e) => setDepartment(e.target.value)} />
+                                </div>
+                            </div>
+                            <div className="field">
+                                <div className="control">
+                                    <label className="label is-medium has-text-white has-text-left">Date Requested</label>
+                                    <input className="input" type="date"
+                                        value={date_requested} onChange={(e) => setDateRequested(e.target.value)} />
+                                </div>
+                            </div>
+                            <div className="field">
+                                <div className="control">
+                                    <label className="label is-medium has-text-white has-text-left">Purpose / Project</label>
+                                    <input className="input" type="text" placeholder="Enter Purpose"
+                                        value={purpose} onChange={(e) => setPurpose(e.target.value)} />
+                                </div>
+                            </div>
                             <div className="columns">
                                 <div className="column is-fullwidth">
-                                    <button className="button is-success mt-5 is-fullwidth is-medium"
+                                    <button onClick={handleInsert} className="button is-success mt- is-fullwidth is-medium"
                                     >SAVE</button>
                                 </div>
                             </div>
-
                         </div>
+                        <table className="table is-striped is-bordered is-fullwidth mt-5 mr-1 ml-1" >
+                            <thead>
+                                <tr>
+                                    <th className="has-text-centered">QTY</th>
+                                    <th className="has-text-centered">description</th>
+                                    <th className="has-text-centered">Remarks</th>
+                                    <th className="has-text-centered">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {tableData.map((row, index) => (
+                                    <tr key={index}>
+                                        <td className="has-text-centered">{row.qty}</td>
+                                        <td className="has-text-centered">{row.description}</td>
+                                        <td className="has-text-centered">{row.remarks}</td>
+                                        <td className="has-text-centered">
+                                            <button className="button is-danger mt-1" onClick={() => handleDelete(index)}
+                                             >DELETE</button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
