@@ -16,6 +16,9 @@ export const PrintRequest = () => {
             });
     }, [apiUrl]);
 
+    const firstItem = data[0] || {};
+    const { department, purpose, input_user: notedBy } = firstItem;
+
     return (
         <div className='container has-background-white'>
             <div className="mr-5 ml-5">
@@ -67,7 +70,7 @@ export const PrintRequest = () => {
                         <h1 className='has-text-black is-size-5 has-text-centered custom-border'> PURCHASE REQUEST FORM</h1>
                     </div>
                     <div className='row custom-border'>
-                        <h1 className='has-text-black is-size-6 has-text-centered'>FROM (Department): {data ? <span>{data.department}</span> : null}</h1>
+                        <h1 className='has-text-black is-size-6 has-text-centered'>FROM (Department): {department}</h1>
                     </div>
                     <div className="row">
                         <table className="table is-striped is-bordered is-fullwidth ">
@@ -85,7 +88,7 @@ export const PrintRequest = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr key={data}>
+                                {/* <tr key={data}>
                                     <td className="has-text-centered"></td>
                                     <td className="has-text-centered">{data.qty}</td>
                                     <td className="has-text-centered"></td>
@@ -95,17 +98,30 @@ export const PrintRequest = () => {
                                     <td className="has-text-centered"></td>
                                     <td className="has-text-centered"></td>
                                     <td className="has-text-centered">{data.remarks}</td>
-                                </tr>
+                                </tr> */}
+                                {data.map(item => (
+                                    <tr key={item.id}>
+                                        <td className="has-text-centered"></td>
+                                        <td className="has-text-centered">{item.qty}</td>
+                                        <td className="has-text-centered"></td>
+                                        <td className="has-text-centered"></td>
+                                        <td className="has-text-centered">{item.description}</td>
+                                        <td className="has-text-centered"></td>
+                                        <td className="has-text-centered"></td>
+                                        <td className="has-text-centered"></td>
+                                        <td className="has-text-centered">{item.remarks}</td>
+                                    </tr>
+                                ))}
                             </tbody>
                         </table>
                     </div>
                     <div className='row'>
-                        <h1 className='has-text-black is-size-6 has-text-left custom-border'>Purpose / Project : {data ? <span>{data.purpose}</span> : null}</h1>
+                        <h1 className='has-text-black is-size-6 has-text-left custom-border'>Purpose / Project : {purpose}</h1>
                     </div>
                     <div className='row mt-1'>
                         <div className="columns">
                             <div className="column">
-                                <h1 className="has-text-black is-size-7 has-text-left ">PREPARED BY : {data ? <span className="is-underlined is-size-6">{data.input_user}</span> : null} </h1>
+                                <h1 className="has-text-black is-size-7 has-text-left ">PREPARED BY : {notedBy && <span className="is-underlined is-size-6">{notedBy}</span>}</h1>
                             </div>
                             <div className="column">
                                 <h1 className="has-text-black is-size-7 has-text-left">NOTED BY : ________________________________</h1>

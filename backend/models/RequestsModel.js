@@ -13,7 +13,7 @@ export const getRequests = (result) => {
 }
 
 export const getRequestsById = (id, result) => {
-    db.query("SELECT * FROM requests WHERE id = ?ORDER BY date_requested DESC",
+    db.query("SELECT * FROM requests WHERE id = ? ORDER BY date_requested DESC",
         [id],
         (err, results) => {
             if (err) {
@@ -26,7 +26,7 @@ export const getRequestsById = (id, result) => {
 }
 
 export const getRequestsByRef = (id, result) => {
-    db.query("SELECT * FROM requests WHERE refnbr = ?ORDER BY date_requested DESC",
+    db.query("SELECT * FROM requests WHERE refnbr = ? ORDER BY date_requested DESC",
         [id],
         (err, results) => {
             if (err) {

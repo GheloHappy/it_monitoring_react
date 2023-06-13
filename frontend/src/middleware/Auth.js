@@ -2,9 +2,10 @@ import { React, useEffect } from 'react';
 import { Navigate, } from 'react-router-dom';
 
 const PrivateRoute = ({ children }) => {
+    const apiUrl = process.env.REACT_APP_API_URL;
     useEffect(() => {
         async function fetchData() {
-            const result = await fetch("http://192.168.1.75:4999/protected", {
+            const result = await fetch(apiUrl+"/protected", {
                 method: "POST",
                 headers: {
                     'x-access-token': localStorage.getItem('token'),

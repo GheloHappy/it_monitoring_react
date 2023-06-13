@@ -1,7 +1,7 @@
 import { useState, useEffect} from "react";
 import {  useNavigate } from "react-router-dom";
 const Register = () => {
-
+    const apiUrl = process.env.REACT_APP_API_URL;
     const [name,setName] = useState("");
     const [username,setUsername] = useState("");
     const [password,setPassword] = useState("");
@@ -19,7 +19,7 @@ const Register = () => {
 
     const handleRegister = async () => {
         const userData = {username,password,name};  
-        let result = await fetch("http://192.168.1.75:4999/user", {
+        let result = await fetch(apiUrl+"/user", {
             method:"POST",
             headers:{"content-type":"application/json"},
             body: JSON.stringify(userData),

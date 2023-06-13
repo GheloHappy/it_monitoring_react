@@ -31,7 +31,7 @@ export const showRequestsByRef = async (req, res) => {
             if(err) {
                 res.send(err);
             } else {
-                res.json(results[0]);
+                res.json(results);
             }
         }
     );
